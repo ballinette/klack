@@ -16,10 +16,31 @@ export default {
   },
   getCurrentUser (cb) {
     var jwt = window.sessionStorage.getItem('jwt');
-    /** Use kuzzle method whoAmI to get current user
-     * Hint : you should set kuzzle to use the jwt got above
-     */
-    cb(null, this.state);
+
+    if (!jwt) {
+      cb('No current user.');
+      kuzzle.setJwtToken(undefined);
+      return false;
+    }
+
+    kuzzle.setJwtToken(jwt);
+
+    kuzzle
+      .whoAmI((error, result) => {
+        if (error) {
+          window.sessionStorage.removeItem('jwt');
+          kuzzle.setJwtToken(undefined);
+          cb(error);
+          return false;
+        }
+
+        this.state.id = result.id;
+        this.state.username = result.content.username;
+        // defaults to author
+        this.state.pictureId = result.content.pictureId || 3;
+
+        cb(null, result);
+      });
   },
   removeCurrentUser () {
     this.state.id = null;
