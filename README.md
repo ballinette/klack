@@ -1,6 +1,6 @@
 # Workshop Kuzzle: Build a slack with Kuzzle
 
-This is the code for the Kuzzle workshop to present the beta version. The code is split in branches and each branch is a step to build a Slack clone.
+This is the code for the Kuzzle workshop to present the beta version. The code is versioned and each tag is a step to build a Slack clone.
 
 ## Preparation
 
