@@ -25,8 +25,7 @@ export default {
     });
   },
   logout () {
-    /** TODO - Step 12: Log out the user to Kuzzle */
-
+    kuzzle.logout();
     userStore.removeCurrentUser();
     window.sessionStorage.removeItem('jwt');
   }
