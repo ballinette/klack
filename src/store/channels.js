@@ -54,8 +54,24 @@ export default {
   /**
    * Subscribe to channels
    * @param {String} channel
-   * TODO - Step4: Subscribe with Kuzzle to `channels` collection's notifications
    */
   subscribeChannels () {
+    var options = {
+      scope: 'in',
+      subscribeToSelf: true,
+      state: 'done'
+    };
+
+    kuzzle
+      .dataCollectionFactory('channels')
+      .subscribe({}, options, (error, response) => {
+        if (error) {
+          console.error(error);
+          return false;
+        }
+
+        this.state.channels.push(response.result._source.name);
+        this.state.channels.sort();
+      });
   }
 }
