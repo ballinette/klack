@@ -106,20 +106,41 @@ export default {
    * Search for messages from Kuzzle
    * @param {String} channel
    * @param {String} searchTerms
-   * TODO - Step 11: Use Kuzzle advancedSearch to search terms in the given channel
    */
   search (channel, searchTerms) {
-    this.state.searchMessages = [
-      {
-        content: "Message content",
-        user: {
-          profileId: -1,
-          pictureId: 3,
-          username: "Bob"
-        },
-        channel: channel
+    var filter = {
+      sort: {date: 'desc'},
+      query : {
+        match: {
+          content: {
+            query: searchTerms,
+            operator : 'and'
+          }
+        }
+      },
+      filter: {
+        term: {
+          channel
+        }
       }
-    ]
+    };
+
+    kuzzle
+      .dataCollectionFactory('messages')
+      .advancedSearch(filter, (error, result) => {
+        if (error) {
+          console.error(error);
+          return false;
+        }
+
+        this.state.searchMessages = result.documents
+          .map(message => {
+            return {
+              ...message.content,
+              id: message.id
+            };
+          });
+      });
   },
   resetSearch () {
     this.state.searchMessages = [];
