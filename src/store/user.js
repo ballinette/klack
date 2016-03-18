@@ -10,12 +10,16 @@ export default {
   },
 
   init () {
-    this.state.pictureId = Math.floor(Math.random() * 12 + 1);
+    //this.state.pictureId = Math.floor(Math.random() * 12 + 1);
   },
   isAuthenticated () {
     return !!this.state.id;
   },
   getCurrentUser (cb) {
+    var jwt = window.sessionStorage.getItem('jwt');
+    /** Use kuzzle method whoAmI to get current user
+     * Hint : you should set kuzzle to use the jwt got above
+     */
     cb(null, this.state);
   },
   removeCurrentUser () {
