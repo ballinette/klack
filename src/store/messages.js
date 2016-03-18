@@ -41,7 +41,6 @@ export default {
   /**
    * Subscribe to messages according to the channel
    * @param {String} channel
-   * TODO - Step 8: This code should be adapted to follow scope.out as well
    */
   subscribeMessages (channel) {
     var
@@ -52,7 +51,7 @@ export default {
         }
       },
       options = {
-        scope: 'in',
+        scope: 'all',
         subscribeToSelf: true,
         state: 'done'
       };
@@ -64,10 +63,18 @@ export default {
     subscription = kuzzle
       .dataCollectionFactory('messages')
       .subscribe(filter, options, (error, response) => {
-        this.state.messages.push({
-          ...response.result._source,
-          id: response.result._id
-        });
+        if (response.scope === 'out') {
+          this.state.messages = this.state.messages.filter(message => {
+            return message.id !== response.result._id;
+          });
+        }
+
+        if (response.scope === 'in') {
+          this.state.messages.push({
+            ...response.result._source,
+            id: response.result._id
+          });
+        }
       });
   },
   /**
