@@ -7,16 +7,22 @@ export default {
     errorLogin: null
   },
   login (username, password) {
-    /** TODO - Step 12: Log in the user to Kuzzle */
-    this.state.errorLogin = null;
+    kuzzle.login('local', {username, password}, '1h', (error, response) => {
+      this.state.errorLogin = null;
+      if (error) {
+        if (error.message) {
+          this.state.errorLogin = error.message
+        }
 
-    /** Once kuzzle response is received, following code should be called:
-     window.sessionStorage.setItem('jwt', <something>);
+        return false;
+      }
 
-     userStore.getCurrentUser(() => {
+      window.sessionStorage.setItem('jwt', response.jwt);
+
+      userStore.getCurrentUser(() => {
         router.go({name: 'home'});
       });
-     */
+    });
   },
   logout () {
     /** TODO - Step 12: Log out the user to Kuzzle */
