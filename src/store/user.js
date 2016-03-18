@@ -2,11 +2,10 @@ import kuzzle from '../services/kuzzle';
 import {router} from '../main';
 
 export default {
-  /** TODO - Step 12: Replace default state with a real default state */
   state: {
-    id: -1,
-    username: "Bob",
-    pictureId: Math.floor(Math.random() * 12 + 1)
+    id: null,
+    username: null,
+    pictureId: null
   },
 
   init () {
