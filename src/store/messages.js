@@ -42,11 +42,29 @@ export default {
   /**
    * Subscribe to messages according to the channel
    * @param {String} channel
-   * TODO - Step 2: Subscribe to all notifications coming from Kuzzle's messages collection
    * TODO - Step 6: Add a filter to subscribe to a specific channel's messages
    * TODO - Step 8: This code should be adapted to follow scope.out as well
    */
   subscribeMessages (channel) {
+    var
+      options = {
+        scope: 'in',
+        subscribeToSelf: true,
+        state: 'done'
+      };
+
+    if (subscription) {
+      subscription.unsubscribe();
+    }
+
+    subscription = kuzzle
+      .dataCollectionFactory('messages')
+      .subscribe({}, options, (error, response) => {
+        this.state.messages.push({
+          ...response.result._source,
+          id: response.result._id
+        });
+      });
   },
   /**
    * Search for messages from Kuzzle
