@@ -31,11 +31,11 @@ export default {
    * Allow to add a new channel given in parameter
    * @param channel
    * @returns {Number}
-   * TODO - Step 5: Add the channel in Kuzzle persistent data
    */
   addChannel (channel) {
-    this.state.channels.push(channel);
-    this.state.channels.sort();
+    kuzzle
+      .dataCollectionFactory('channels')
+      .createDocument({name: channel});
   },
   /**
    * Remove a channel according to the channel name given
